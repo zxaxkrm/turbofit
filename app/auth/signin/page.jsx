@@ -6,7 +6,12 @@ import { FaHashnode } from "react-icons/fa6";
 import { signIn } from '@/auth';
 
 
-const page = () => {
+const page = async () => {
+
+ const session = await auth()
+  console.log(session?.user?.name);
+  console.log(session)
+  
   return (
     <main className="bg-[url('/dumbells.jpg')] bg-cover bg-no-repeat min-h-dvh">
      <section className='min-h-dvh bg-black/80 flex items-center justify-center'>
