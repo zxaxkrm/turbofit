@@ -1,3 +1,4 @@
+
 "use client";
 import React from "react";
 import { FaPhone } from "react-icons/fa6";
@@ -14,7 +15,7 @@ const Contactpage = () => {
   const initialValues = {
     fullname: "",
     email: "",
-    messaage: "",
+    message: "",
   };
 
   const validationSchema = Yup.object({
