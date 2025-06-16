@@ -4,26 +4,32 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { HiOutlineMenu } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
+import { useSession } from 'next-auth/react';
 
 
 const Navbar = () => {
 
   const [navOpen, setnavOpen] = useState(false)
 
+  const {data : session} = useSession();
+  console.log(session);
+  
+  
+
   const navItems = [
     {label: "Home", url:"/"},
     {label: "Categories", url:"/categories"},
     {label: "Shop", url:"/shop"},
-    {label: "Sign In", url:"/signin"},
-    {label: "Sign Up", url:"/signup"},
+    {label: "Contact", url:"/contact"},
+    
     
 
   ]
   return (
-  <nav className='flex items-center justify-between sticky top-0 shadow-md px-6 py-2 bg-black z-50'>
+  <nav className='flex items-center justify-between sticky top-0 shadow-md px-6 py-2 bg-gray-100 z-50'>
     <div className='md:flex items-center z-50 '>
       <Image
-      src={"/gymbag.png"}
+      src={"/muscles.png"}
       alt={"logo"}
       width={800}
       height={800}
@@ -33,7 +39,9 @@ const Navbar = () => {
       <h1 className='text-red-500 text-lg font-bold italic max-md:hidden'>TurboFit</h1>
     </div>
 
-    <div className=' flex gap-10 max-lg:hidden bg-black'>
+
+    <div className='flex gap-10 items-center'>
+  <div className=' flex gap-10 max-lg:hidden '>
       {navItems.map((items, index)=>(
         <Link 
         key={index}
@@ -44,6 +52,25 @@ const Navbar = () => {
         </Link>
       ))}
     </div >
+
+    {session ? (
+      <div>
+        <button
+        id='basic-button'
+        className='outline-none'
+        >
+          <img
+           src={session?.user?.image} 
+          alt={session?.user?.name.slice(0,2).toUpperCase()} 
+          className='rounded-full w-10 h-10 text-red-500 hover:text-white' />
+        </button>
+      </div>
+    ) : (
+      <Link className='lg:text-lg hover:text-white text-red-500' href={"/auth/signin"}>
+      Sign Up</Link>
+    )}
+    </div>
+  
 
 
 {/* for mobile and tablets */}

@@ -3,13 +3,14 @@ import Image from 'next/image'
 import { FcGoogle } from "react-icons/fc";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaHashnode } from "react-icons/fa6";
-import { signIn } from '@/auth';
+import { signIn, auth } from '@/auth';
 
 
 const page = async () => {
 
  const session = await auth()
   console.log(session?.user?.name);
+  console.log(session?.user?.image);
   console.log(session)
   
   return (
