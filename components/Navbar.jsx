@@ -36,7 +36,7 @@ const Navbar = () => {
       className='w-18 h-18'
       />
       <br />
-      <h1 className='text-red-500 text-lg font-bold italic max-md:hidden'>TurboFit</h1>
+      <h1 className='text-[#5A363A] text-lg font-bold italic max-md:hidden'>TurboFit</h1>
     </div>
 
 
@@ -46,7 +46,7 @@ const Navbar = () => {
         <Link 
         key={index}
         href={items.url}
-        className='lg:text-lg hover:text-white text-red-500 transition-all'
+        className='lg:text-lg hover:text-white text-[#5A363A] transition-all'
         >
         {items.label}
         </Link>
@@ -62,11 +62,11 @@ const Navbar = () => {
           <img
            src={session?.user?.image} 
           alt={session?.user?.name.slice(0,2).toUpperCase()} 
-          className='rounded-full w-10 h-10 text-red-500 hover:text-white' />
+          className='rounded-full w-10 h-10 text-[#5A363A] hover:text-white' />
         </button>
       </div>
     ) : (
-      <Link className='lg:text-lg hover:text-white text-red-500' href={"/auth/signin"}>
+      <Link className='lg:text-lg hover:text-white text-[#5A363A]' href={"/auth/signin"}>
       Sign Up</Link>
     )}
     </div>

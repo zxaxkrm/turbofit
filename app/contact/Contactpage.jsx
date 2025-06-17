@@ -1,5 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "@/lib/firebaseConfig";
 import { FaPhone } from "react-icons/fa6";
 import { FaEnvelope } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
@@ -9,99 +11,181 @@ import { RiTwitterXFill } from "react-icons/ri";
 import { FaGithub } from "react-icons/fa6";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { LuLoaderPinwheel } from "react-icons/lu";
+import { Alert, Snackbar } from "@mui/material";
 
 const Contactpage = () => {
+  const [processing, setProcessing] = useState(false);
+ const[alertType, setAlertType] = useState("success");
+ const [open, setOpen]= useState(false);
+
   const initialValues = {
-    fullname: "",
+    firstname: "",
+    lastname: "",
     email: "",
-    messaage: "",
+    phonenumber: "",
+    message: "",
   };
 
   const validationSchema = Yup.object({
-    fullname: Yup.string().required("Position is a required field"),
-    email: Yup.string().required("Position is a required field"),
+    firstname: Yup.string().required("First name is a required field"),
+    lastname: Yup.string().required("Last name is a required field"),
+    phonenumber: Yup.string().required("This is required"),
+    email: Yup.string().required("Email name is a required field"),
     message: Yup.string()
-      .required("Achievements is a required field")
-      .min(5, "Minimum of 5 characters"),
+      .required("This is a required field")
+      .min(10, "minimum of 10 characters"),
   });
 
   const handleSubmit = async (values, { resetForm }) => {
-    const contactvalue = { ...values };
+    setProcessing(true);
 
-    console.log(contactvalue);
+    try {
+      const contactvalue = { ...values };
 
-    resetForm();
+      const docRef = await addDoc(collection(db, "contact"), contactvalue);
+      console.log(contactvalue);
+      console.log("Document written with ID: ", docRef.id);
+      setAlertType("success"); // set to success
+    setOpen(true);
+
+      resetForm();
+    } catch (error) {
+      console.error("an error occured", error);
+       setAlertType("error"); // set to error
+    setOpen(true);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
-    <main className="min-h-dvh">
-      <div className="p-4 text-white bg-neutral-800 text-center ">
-        <h1 className=" font-semibold text-5xl ">Contact Us</h1>
-        <p className=" text-sm  justify-around">
-          Have a question or want to learn more about our programs and our
-          store? Reach out to us via the form below, and we'll get back to you
-          as soon as possible.
-        </p>
-      </div>
-      <section className="min-h-dvh flex gap-8 bg-neutral-800 ">
-        <div className="text-white bg-neutral-800 w-full px-15 flex justify-center  items-center">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            <Form className=" md:border border-red-400 w-2/3 py-8 gap-10 flex flex-col items-center my-5 space-y-5 ">
-              <div>
-                <Field
-                  type="text"
-                  placeholder="fullname..."
-                  name="fullname"
-                  className="border-b border-white p-3 outline-none   shadow"
-                />
-                <ErrorMessage
-                  name="fullname"
-                  component="p"
-                  className="text-xs text-red-600 mt-2"
-                />
-              </div>
-
-              <div>
-                <Field
-                  type="text"
-                  placeholder="email..."
-                  name="email"
-                  className="border-b border-gray-200 p-3 outline-none shadow"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="p"
-                  className="text-xs text-red-600 mt-2"
-                />
-              </div>
-
-              <div>
-                <Field
-                  type="text"
-                  placeholder="How can we help you?..."
-                  name="message"
-                  className="border-b border-gray-200 p-3 outline-none    shadow"
-                />
-                <ErrorMessage
-                  name="message"
-                  component="p"
-                  className="text-xs text-red-600 mt-2"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="bg-red-500 text-white flex items-center justify-center p-3 rounded-md w-25 font-semibold hover:bg-blue-600 transition-colors duration-200 outline-none"
-              >
-                Submit
-              </button>
-            </Form>
-          </Formik>
+    <main className="min-h-dvh ">
+      <div className="p-4 text-white py-15 bg-neutral-800 text-center ">
+        <div className="w-full lg:flex mt-10 px-30">
+          <div className="w-full lg:flex justify-between  mx-auto border-b border-[#9B8687]">
+            <h1 className=" font-bold text-5xl text-white border-b-8 pb-4 border-[#9B8687] ">
+              CONTACT
+            </h1>
+          </div>
         </div>
+      </div>
+      <section className="min-h-dvh flex justify-center gap-8 px-60 py-15 bg-neutral-800 ">
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          <Form className="space-y-7 max-md:pt-3 w-full ">
+            <div className="">
+              <div className="mb-7">
+                <label className="text-white font-thin mb-2 text-sm">
+                  First Name*
+                </label>
+                <Field
+                  name="firstname"
+                  type="text"
+                  placeholder="First name"
+                  className="border  border-[#DAB55D] text-white p-3 outline-none w-full  shadow"
+                />
+
+                <ErrorMessage
+                  name="firstname"
+                  component={"p"}
+                  className="text-xs text-red-600 mt-2"
+                />
+              </div>
+
+              <div>
+                <label className="text-white font-thin text-sm">
+                  Last Name*
+                </label>
+                <Field
+                  name="lastname"
+                  type="text"
+                  placeholder="Last name"
+                  className="border  border-[#DAB55D] text-white p-3 outline-none w-full  shadow"
+                />
+                <ErrorMessage
+                  name="lastname"
+                  component={"p"}
+                  className="text-xs text-red-600 mt-2"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-white font-thin text-sm">Email*</label>
+              <Field
+                name="email"
+                type="text"
+                placeholder="email@example.com"
+                className="border  border-[#DAB55D] p-3 text-white outline-none w-full  shadow"
+              />
+              <ErrorMessage
+                name="email"
+                component={"p"}
+                className="text-xs text-red-600 mt-2"
+              />
+            </div>
+
+            <div>
+              <label className="text-white font-thin text-sm">Phone*</label>
+              <Field
+                name="phonenumber"
+                type="text"
+                placeholder="+234 80 0011 0011"
+                className="border  border-[#DAB55D] p-3 text-white outline-none w-full  shadow"
+              />
+              <ErrorMessage
+                name="phonenumber"
+                component={"p"}
+                className="text-xs text-red-600 mt-2"
+              />
+            </div>
+
+            <div>
+              <label className="text-white font-thin pb-3 text-sm h-16">
+                Comments*
+              </label>
+              <Field
+                name="message"
+                placeholder="Your message"
+                type="text"
+                className="border border-[#DAB55D] p-3 outline-none w-full text-white shadow h-35"
+              />
+              <ErrorMessage
+                name="message"
+                component={"p"}
+                className="text-xs text-red-600 mt-2"
+              />
+            </div>
+
+            <button
+              disabled={processing}
+              type="submit"
+              className="  p-3 px-10 text-[#DAB55D] border-2 font-semibold hover:text-white transition-all "
+            >
+              {processing ? (
+                <LuLoaderPinwheel className="animate-spin text-2xl" />
+              ) : (
+                "Submit"
+              )}
+            </button>
+          </Form>
+        </Formik>
+
+           <Snackbar
+  open={open}
+  autoHideDuration={4000}
+  onClose={() => setOpen(false)}
+  anchorOrigin={{ vertical:'top', horizontal:'center'}}
+  
+>
+  <Alert onClose={() => setOpen(false)} severity={alertType}>
+    {alertType === "success" ? "Your message was successfully sent!" : "Failed to send message."}
+  </Alert>
+</Snackbar>
       </section>
     </main>
   );

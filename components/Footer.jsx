@@ -20,10 +20,34 @@ const Footer = () => {
                  className='w-18 h-18'
                  />
                  <br />
-                 <h1 className='text-red-500 text-lg font-bold italic max-md:hidden'>TurboFit</h1>
+                 <h1 className='text-[#DAB55D] text-lg font-bold italic max-md:hidden'>TurboFit</h1>
                </div>
           
+         
+
+          
+
           <ul className="text-gray-300 space-y-2 capitalize">
+            <li className="mb-4 text-lg font-bold text-white">Opening Hours</li>
+            <li>Sun-Fri: 9AM to 10PM</li>
+            <li>Saturday: 10AM to 7PM</li>
+            
+            <li> 
+              <div className="flex items-center gap-5 text-lg "><h1><FaInstagram /></h1><h1><RiTwitterXFill /></h1><h1><FaGithub /></h1></div>
+            </li>
+          </ul>
+
+          <ul className="text-gray-300 space-y-2 capitalize">
+            <li className="mb-4 text-lg font-bold text-white">Contact Us</li>
+            <li>407 Gado Nasko Rd</li>
+            <li>Kubwa, Abuja</li>
+            <li>Mail: turbofit.support@gmail.com</li>
+            <li>Tel: 0801110011</li>
+          </ul>
+          
+
+          <div>
+         <ul className="text-gray-300 space-y-2 capitalize">
             <li className="mb-4 text-lg font-bold text-white">Menu</li>
             <li>Facility</li>
             <li>Methods</li>
@@ -37,23 +61,9 @@ const Footer = () => {
             <li>Accessibility</li>
           </ul>
 
-          <ul className="text-gray-300 space-y-2 capitalize">
-            <li className="mb-4 text-lg font-bold text-white">Contact Us</li>
-            <li>407 Gado Nasko Rd</li>
-            <li>Kubwa, Abuja</li>
-            <li>Mail: turbofit.support@gmail.com</li>
-            <li>Tel: 0801110011</li>
-          </ul>
-
-          <ul className="text-gray-300 space-y-2 capitalize">
-            <li className="mb-4 text-lg font-bold text-white">Opening Hours</li>
-            <li>Sun-Fri: 9AM to 10PM</li>
-            <li>Saturday: 10AM to 7PM</li>
-            
-            <li> 
-              <div className="flex items-center gap-5 text-lg "><h1><FaInstagram /></h1><h1><RiTwitterXFill /></h1><h1><FaGithub /></h1></div>
-            </li>
-          </ul>
+          <button className="bg-[#DAB55D] transition-all hover:underline mt-4  px-4 py-2 text-center justify-center font-semibold text-black">BOOK NOW</button>
+          </div>
+          
 
          
         </div>
