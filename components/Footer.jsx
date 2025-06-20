@@ -10,18 +10,18 @@ const Footer = () => {
   return (
     <main>
       <section className="bg-neutral-900 text-white space-y-10 pt-20 pb-10 max-md:flex-col max-md:flex">
-        <div className="flex  max-lg:p-3 justify-around max-md:flex-col max-md:gap-10 max-lg:grid max-lg:grid-cols-3 max-lg:space-y-13">
-          <div>
-            <Image
-                 src={"/muscles.png"}
-                 alt={"logo"}
-                 width={800}
-                 height={800}
-                 className='w-18 h-18'
-                 />
-                 <br />
-                 <h1 className='text-[#DAB55D] text-lg font-bold italic max-md:hidden'>TurboFit</h1>
-               </div>
+        <div className="lg:flex  max-lg:p-3 justify-around max-md:grid   md:grid md:grid-cols-3 max-lg:space-y-13">
+        <div className='md:flex h-18 '>
+              <Image
+              src={"/muscles.png"}
+              alt={"logo"}
+              width={800}
+              height={800}
+              className='w-18 h-18 bg-[#DAB55D]'
+              />
+              <br />
+              <h1 className='text-[#DAB55D] border-2 px-2 py-5 text-lg font-bold italic max-md:hidden'>TurboFit</h1>
+            </div>
           
          
 
