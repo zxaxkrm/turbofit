@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
@@ -23,7 +24,6 @@ const Contactpage = () => {
     firstname: "",
     lastname: "",
     email: "",
-    phonenumber: "",
     message: "",
   };
 
