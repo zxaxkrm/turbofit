@@ -18,7 +18,7 @@ const Navbar = () => {
 
   const navItems = [
     {label: "Home", url:"/"},
-    {label: "Categories", url:"/categories"},
+    {label: "Pricing", url:"/pricing"},
     {label: "Shop", url:"/shop"},
     {label: "Contact", url:"/contact"},
     
@@ -26,17 +26,17 @@ const Navbar = () => {
 
   ]
   return (
-  <nav className='flex items-center justify-between sticky top-0 shadow-md px-6 py-2 bg-gray-100 z-50'>
+  <nav className='flex items-center justify-between sticky top-0 shadow-md px-6 py-2 bg-neutral-800 z-50'>
     <div className='md:flex items-center z-50 '>
       <Image
       src={"/muscles.png"}
       alt={"logo"}
       width={800}
       height={800}
-      className='w-18 h-18'
+      className='w-18 h-18 bg-[#DAB55D]  p-2'
       />
       <br />
-      <h1 className='text-[#5A363A] text-lg font-bold italic max-md:hidden'>TurboFit</h1>
+      <h1 className='text-[#DAB55D] px-3 py-5 border-3 border-[#DAB55D] text-lg font-bold italic max-md:hidden'>TurboFit</h1>
     </div>
 
 
@@ -46,7 +46,7 @@ const Navbar = () => {
         <Link 
         key={index}
         href={items.url}
-        className='lg:text-lg hover:text-white text-[#5A363A] transition-all'
+        className='text-sm hover:text-white text-[#DAB55D] transition-all'
         >
         {items.label}
         </Link>
@@ -66,7 +66,7 @@ const Navbar = () => {
         </button>
       </div>
     ) : (
-      <Link className='lg:text-lg hover:text-white text-[#5A363A]' href={"/auth/signin"}>
+      <Link className='text-sm hover:text-[#DAB55D] text-white' href={"/auth/signin"}>
       Sign Up</Link>
     )}
     </div>

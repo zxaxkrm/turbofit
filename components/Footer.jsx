@@ -9,26 +9,23 @@ import { RiTwitterXFill } from "react-icons/ri";
 const Footer = () => {
   return (
     <main>
-      <section className="bg-neutral-900 text-white space-y-10 pt-20 pb-10 max-md:flex-col max-md:flex">
-        <div className="flex  max-lg:p-3 justify-around max-md:flex-col max-md:gap-10 max-lg:grid max-lg:grid-cols-3 max-lg:space-y-13">
-          <div>
+      <section className="bg-neutral-900 text-white space-y-10 pt-20 pb-10 ">
+        <div className="md:flex   justify-around max-md:px-4 max-md:space-y-8  ">
+          <div className="">
             <Image
                  src={"/muscles.png"}
                  alt={"logo"}
                  width={800}
                  height={800}
-                 className='w-18 h-18'
+                 className=' bg-[#DAB55D]  w-18 h-18'
                  />
                  <br />
-                 <h1 className='text-[#DAB55D] text-lg font-bold italic max-md:hidden'>TurboFit</h1>
+                 <h1 className='text-[#DAB55D] text-lg font-bold italic '>TurboFit</h1>
                </div>
           
-         
 
-          
-
-          <ul className="text-gray-300 space-y-2 capitalize">
-            <li className="mb-4 text-lg font-bold text-white">Opening Hours</li>
+          <ul className="text-gray-300 space-y-2 max-lg:text-sm capitalize">
+            <li className="mb-4 max-lg:text-base text-lg font-bold text-white">Opening Hours</li>
             <li>Sun-Fri: 9AM to 10PM</li>
             <li>Saturday: 10AM to 7PM</li>
             
@@ -37,8 +34,8 @@ const Footer = () => {
             </li>
           </ul>
 
-          <ul className="text-gray-300 space-y-2 capitalize">
-            <li className="mb-4 text-lg font-bold text-white">Contact Us</li>
+          <ul className="text-gray-300 space-y-2 text-sm capitalize">
+            <li className="mb-4 max-lg:text-base lg:text-lg font-bold text-white">Contact Us</li>
             <li>407 Gado Nasko Rd</li>
             <li>Kubwa, Abuja</li>
             <li>Mail: turbofit.support@gmail.com</li>
@@ -47,8 +44,8 @@ const Footer = () => {
           
 
           <div>
-         <ul className="text-gray-300 space-y-2 capitalize">
-            <li className="mb-4 text-lg font-bold text-white">Menu</li>
+         <ul className="text-gray-300 max-lg:text-sm space-y-2 capitalize">
+            <li className="mb-4 lg:text-lg font-bold text-white">Menu</li>
             <li>Facility</li>
             <li>Methods</li>
             <li>Program List</li>
