@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
+import { FaDiamond } from "react-icons/fa6";
 
 
 const Footer = () => {
@@ -11,16 +12,12 @@ const Footer = () => {
     <main>
       <section className="bg-neutral-900 text-white space-y-10 pt-20 pb-10 ">
         <div className="md:flex   justify-around max-md:px-4 max-md:space-y-8  ">
-          <div className="">
-            <Image
-                 src={"/muscles.png"}
-                 alt={"logo"}
-                 width={800}
-                 height={800}
-                 className=' bg-[#DAB55D]  w-18 h-18'
-                 />
-                 <br />
-                 <h1 className='text-[#DAB55D] text-lg font-bold italic '>TurboFit</h1>
+           <div className=" items-center z-50 ">
+             
+                 <h1 className="text-white flex  text-2xl font-bold italic max-md:text-lg">
+                   TURBOFIT<FaDiamond className="text-[#DAB55D] mx-2"/>
+                 </h1>
+                 <p className="text-white flex  text-2xl font-bold italic max-md:text-lg">FITNESS HUB</p>
                </div>
           
 

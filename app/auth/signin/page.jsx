@@ -16,7 +16,7 @@ const page = async () => {
   return (
     <main className="bg-[url('/dumbells.jpg')] bg-cover bg-no-repeat min-h-dvh">
      <section className='min-h-dvh bg-black/80 flex items-center justify-center'>
-     <div  className='w-3/4 text-white px-10'>
+     <div  className='w-3/4 text-white md:px-10'>
     <h1 className='text-center max-md:w-full text-lg md:text-5xl font-bold'>Sign In to TurboFit</h1>
 
     <div className='flex flex-col items-center justify-center gap-7 mt-6 w-full'>
@@ -27,7 +27,7 @@ const page = async () => {
               await signIn("google");
             }}
           >
-           <button className="border w-full flex items-center justify-center gap-3 text-lg rounded-full py-3">
+           <button className="border w-full flex items-center justify-center gap-3 md:text-lg rounded-full py-3">
               <FcGoogle className="text-2xl" />
               Sign in with Google
             </button>
@@ -35,9 +35,9 @@ const page = async () => {
           </form>
         
 
-        <button className='flex md:text-xl font-semibold gap-4 border border-white rounded-full w-full md:px-6 md:py-4 md:mx-8 justify-center'><FaXTwitter className='text-red'/>Sign In with X</button>
+        <button className="border w-full flex items-center justify-center gap-3 md:text-lg rounded-full py-3" ><FaXTwitter className='text-red'/>Sign In with X</button>
 
-        <button className='flex md:text-xl font-semibold gap-4 border border-white rounded-full w-full md:px-6 md:py-4 md:mx-8 justify-center'><FaHashnode />Sign In with ID</button>
+        <button className="border w-full flex items-center justify-center gap-3 md:text-lg rounded-full py-3"><FaHashnode />Sign In with ID</button>
     </div>
 
      </div>

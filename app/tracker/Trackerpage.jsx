@@ -8,11 +8,15 @@ import { Alert, Snackbar } from "@mui/material";
 import { ImSpinner10 } from "react-icons/im";
 
 import { Spinnaker } from "next/font/google";
+// import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 
 
 
-const Trackerpage = () => {
+const Trackerpage =  () => {
+
+  
 
   const [loading, setLoading] = useState(false);
   const [alertType, setAlertType] = useState("success");
@@ -104,53 +108,6 @@ const Trackerpage = () => {
     }
   };
 
-// const fetchSummary = async(days) => {
-//   try {
-//     const today = new Date();
-//     const startDate = new Date();
-//       startDate.setDate(today.getDate - days);
-
-//     const q = query(collection(db, "fithistory"), orderBy("date", "desc"));
-//     const snapshot = await getDocs(q);
-
-//     const data = snapshot.docs
-//     .map((doc)=> doc.data())
-//     .filter((item) => new Date(item.date) >= startDate );
-
-
-//     if (data.length = 0) {
-//       setSummary({weightChange:0, daysTrained:0, mostTrained:"N/A", leastTrained:"N/A"})
-//     }
-
-//     const startweight = parseFloat(data[data.length - 1].weight);
-//     const endweight = parseFloat(data[0].weight);
-//     const weightChange = endweight - startweight;
-
-
-//     const daysTrained = data.length;
-
-//     const counts = {};
-//     data.forEach((entry)=> {
-//       entry.groupworked.forEach((g)=>{
-//         counts[g] = (counts[g] || 0) + 1;
-
-//       })
-//     })
-
-
-//     const mostTrained = 
-//     Object.keys(counts).reduce((a,b)=> (counts[a] > counts[b] ? a:b )) || "N/A";
-
-//     const leastTrained =
-//     Object.keys(counts).reduce((a,b)=>(counts[a] < counts[b] ? a:b)) || "N/A";
-
-//     setSummary({weightChange, daysTrained, mostTrained, mostTrained, leastTrained});
-// }catch(error){
-//     console.error("Error fetching summary", error);
-    
-//   }
-// }
-
 const fetchSummary = async (days) => {
   try {
     const today = new Date();
@@ -164,7 +121,7 @@ const fetchSummary = async (days) => {
       .map((doc) => doc.data())
       .filter((item) => new Date(item.date) >= startDate);
 
-    // ✅ Prevent crash if no records
+    //  Prevent crash if no records
     if (data.length === 0) {
       setSummary({
         weightChange: 0,
@@ -226,7 +183,7 @@ useEffect(()=>{
         </div>
       </div>
 
-      <div className=" md:flex justify-between md:px-12 ">
+      <div className=" md:flex gap-8  justify-between md:px-12 ">
         <div className="border border-[#DAB55D] bg-[#3c1f1f] p-5  space-y-13 mb-20">
           <h1 className="font-bold text-3xl text-white">DAILY FITNESS TRACKER</h1>
 
@@ -327,12 +284,12 @@ useEffect(()=>{
 
             
       {/* RANGE SWITCHER */}
-      <div className="mb-5 flex gap-3">
+      <div className="mb-5 md:flex gap-3">
         {[7, 30, 90, 180, 365].map((days) => (
           <button
             key={days}
             onClick={() => setSelectedRange(days)}
-            className={`px-3 py-1 rounded font-semibold ${
+            className={`px-3 py-1 rounded font-semibold  ${
               selectedRange === days ? "bg-[#DAB55D] text-black" : "bg-[#3c1f1f] text-[#DAB55D]"
             }`}
           >
