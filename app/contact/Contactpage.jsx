@@ -18,7 +18,7 @@ import { Alert, Snackbar } from "@mui/material";
 const Contactpage = () => {
   const [processing, setProcessing] = useState(false);
  const[alertType, setAlertType] = useState("success");
- const [open, setOpen]= useState(false);
+ const [open, setOpen]= useState(false);z
 
   const initialValues = {
     firstname: "",
@@ -62,15 +62,15 @@ const Contactpage = () => {
   return (
     <main className="min-h-dvh ">
       <div className="p-4 text-white py-15 bg-neutral-800 text-center ">
-        <div className="w-full lg:flex mt-10 md:px-30">
-          <div className="w-full lg:flex justify-between  mx-auto border-b border-[#9B8687]">
+        <div className="w-full lg:flex md:mt-10 md:px-30">
+          <div className="w-full lg:flex justify-between mx-auto border-b border-[#9B8687]">
             <h1 className=" font-bold text-4xl md:text-5xl text-white border-b-8 pb-4 border-[#9B8687] ">
-              CONTACT
+              CONTACT US
             </h1>
           </div>
         </div>
       </div>
-      <section className="min-h-dvh md:flex md:justify-center gap-8 px-5 md:px-60 py-15 bg-neutral-800 ">
+      <section className="min-h-dvh flex justify-center gap-8 max-md:px-6 md:px-6 lg:px-60 py-15 bg-neutral-800 ">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}

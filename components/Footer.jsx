@@ -4,31 +4,25 @@ import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
+import { FaDiamond } from "react-icons/fa6";
 
 
 const Footer = () => {
   return (
     <main>
-      <section className="bg-neutral-900 text-white space-y-10 pt-20 pb-10 max-md:flex-col max-md:flex">
-        <div className="lg:flex  max-lg:p-3 justify-around max-md:grid   md:grid md:grid-cols-3 max-lg:space-y-13">
-        <div className='md:flex h-18 '>
-              <Image
-              src={"/muscles.png"}
-              alt={"logo"}
-              width={800}
-              height={800}
-              className='w-18 h-18 bg-[#DAB55D]'
-              />
-              <br />
-              <h1 className='text-[#DAB55D] border-2 px-2 py-5 text-lg font-bold italic max-md:hidden'>TurboFit</h1>
-            </div>
-          
-         
-
+      <section className="bg-neutral-900 text-white space-y-10 pt-20 pb-10 ">
+        <div className="md:flex   justify-around max-md:px-4 max-md:space-y-8  ">
+           <div className=" items-center z-50 ">
+             
+                 <h1 className="text-white flex  text-2xl font-bold italic max-md:text-lg">
+                   TURBOFIT<FaDiamond className="text-[#DAB55D] mx-2"/>
+                 </h1>
+                 <p className="text-white flex  text-2xl font-bold italic max-md:text-lg">FITNESS HUB</p>
+               </div>
           
 
-          <ul className="text-gray-300 space-y-2 capitalize">
-            <li className="mb-4 text-lg font-bold text-white">Opening Hours</li>
+          <ul className="text-gray-300 space-y-2 max-lg:text-sm capitalize">
+            <li className="mb-4 max-lg:text-base text-lg font-bold text-white">Opening Hours</li>
             <li>Sun-Fri: 9AM to 10PM</li>
             <li>Saturday: 10AM to 7PM</li>
             
@@ -37,8 +31,8 @@ const Footer = () => {
             </li>
           </ul>
 
-          <ul className="text-gray-300 space-y-2 capitalize">
-            <li className="mb-4 text-lg font-bold text-white">Contact Us</li>
+          <ul className="text-gray-300 space-y-2 text-sm capitalize">
+            <li className="mb-4 max-lg:text-base lg:text-lg font-bold text-white">Contact Us</li>
             <li>407 Gado Nasko Rd</li>
             <li>Kubwa, Abuja</li>
             <li>Mail: turbofit.support@gmail.com</li>
@@ -47,8 +41,8 @@ const Footer = () => {
           
 
           <div>
-         <ul className="text-gray-300 space-y-2 capitalize">
-            <li className="mb-4 text-lg font-bold text-white">Menu</li>
+         <ul className="text-gray-300 max-lg:text-sm space-y-2 capitalize">
+            <li className="mb-4 lg:text-lg font-bold text-white">Menu</li>
             <li>Facility</li>
             <li>Methods</li>
             <li>Program List</li>
