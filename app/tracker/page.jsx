@@ -2,6 +2,7 @@
 import React from 'react'
 import Trackerpage from './Trackerpage'
 import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 const page = async () => {
 
