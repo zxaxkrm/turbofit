@@ -16,7 +16,10 @@ export default function Home() {
           </p>
         </div>
 
-        <a href="/membership" className="flex pl-2 items-center hover:cursor-pointer ">
+        <a
+          href="/membership"
+          className="flex pl-2 items-center hover:cursor-pointer "
+        >
           <span className="bg-white text-neutral-800 font-bold px-10 py-4">
             GET STARTED
           </span>
@@ -24,8 +27,6 @@ export default function Home() {
             <FaArrowRight />
           </span>
         </a>
-
-        
       </section>
 
       <section className="min-h-dvh bg-[#5A363A]  p-10 py-20 md:px-10">

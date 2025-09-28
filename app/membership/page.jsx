@@ -18,7 +18,11 @@ const membership = () => {
       <section className="flex flex-col gap-8  items-center justify-center bg-neutral-800">
         <div className="flex max-md:flex-col md:justify-around max-lg:px-6  max-md:px-4 ">
           <div>
-            <img src="/monthly.webp" alt="month" className="h-54 md:w-110 max-md:w-78 " />
+            <img
+              src="/monthly.webp"
+              alt="month"
+              className="h-54 md:w-110 max-md:w-78 "
+            />
           </div>
 
           <div className="items-center justify-center py-5 border pl-6 border-gray-500 md:w-110 space-y-5 ">
@@ -33,7 +37,11 @@ const membership = () => {
 
         <div className="flex max-md:flex-col md:justify-around max-lg:px-6  max-md:px-4 ">
           <div>
-            <img src="/quarter.webp" alt="quart" className="h-54 md:w-110 max-md:w-78 " />
+            <img
+              src="/quarter.webp"
+              alt="quart"
+              className="h-54 md:w-110 max-md:w-78 "
+            />
           </div>
 
           <div className="items-center justify-center py-5 border pl-6 border-gray-500 md:w-110 space-y-5 ">
@@ -48,7 +56,11 @@ const membership = () => {
 
         <div className="flex max-md:flex-col max-md:px-4 max-lg:px-6 justify-around ">
           <div>
-            <img src="/coach.webp" alt="annual" className="h-54 md:w-110 max-md:w-78" />
+            <img
+              src="/coach.webp"
+              alt="annual"
+              className="h-54 md:w-110 max-md:w-78"
+            />
           </div>
 
           <div className="items-center justify-center py-5 border pl-6 border-gray-500 md:w-110 space-y-5 ">

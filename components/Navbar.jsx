@@ -73,23 +73,23 @@ const Navbar = () => {
               />
             </button>
 
-              <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            slotProps={{
-              list: {
-                "aria-labelledby": "basic-button",
-              },
-            }}
-          >
-            
-           
-            <MenuItem onClick={handleClose}>
-              <button onClick={()=>signOut({redirectTo:"/auth/signin"})}>Sign Out</button>
-            </MenuItem>
-          </Menu>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              slotProps={{
+                list: {
+                  "aria-labelledby": "basic-button",
+                },
+              }}
+            >
+              <MenuItem onClick={handleClose}>
+                <button onClick={() => signOut({ redirectTo: "/auth/signin" })}>
+                  Sign Out
+                </button>
+              </MenuItem>
+            </Menu>
           </div>
         ) : (
           <Link

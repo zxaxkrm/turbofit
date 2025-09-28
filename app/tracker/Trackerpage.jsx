@@ -1,6 +1,14 @@
 "use client";
 import { db } from "@/lib/firebaseConfig";
-import { addDoc, collection, doc, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
@@ -11,26 +19,19 @@ import { Spinnaker } from "next/font/google";
 // import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-
-
-
-const Trackerpage =  () => {
-
-  
-
+const Trackerpage = () => {
   const [loading, setLoading] = useState(false);
   const [alertType, setAlertType] = useState("success");
-  const [open, setOpen]= useState(false);
-  const [message, setMessage] = useState("")
-  const [summary, setSummary] = useState ({
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [summary, setSummary] = useState({
     weightChange: 0,
     daysTrained: 0,
     mostTrained: "",
     leastTrained: "",
+  });
 
-  })
-
- const [selectedRange, setSelectedRange] = useState(30);
+  const [selectedRange, setSelectedRange] = useState(30);
 
   const groupworked = [
     "Boxing Session",
@@ -60,116 +61,113 @@ const Trackerpage =  () => {
   });
 
   // submit handler
-  const handleSubmit = async (values, {resetForm}) => {
-   setLoading(true);
+  const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true);
     try {
       const fitnessvalue = {
         ...values,
         createdAt: new Date().toISOString(),
       };
 
-     const q = query(collection(db, "fithistory"),
-    where ("date", "==", values.date ));
+      const q = query(
+        collection(db, "fithistory"),
+        where("date", "==", values.date)
+      );
 
-    const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);
 
-    if (!querySnapshot.empty) {
-         setAlertType("error");
-      setMessage("You already logged your activities for this date.")
-      setOpen(true);
-      setLoading(false);
-      return;
-    }
-      
+      if (!querySnapshot.empty) {
+        setAlertType("error");
+        setMessage("You already logged your activities for this date.");
+        setOpen(true);
+        setLoading(false);
+        return;
+      }
 
-      const docRef = await addDoc(collection(db,"fithistory"), fitnessvalue);
-      
+      const docRef = await addDoc(collection(db, "fithistory"), fitnessvalue);
+
       console.log(fitnessvalue);
       console.log("Document written with ID:", docRef.id);
       setAlertType("success");
-      setMessage("Saved successfully!")
-      setOpen(true)
-       
+      setMessage("Saved successfully!");
+      setOpen(true);
+
       resetForm();
-      
 
       // later you’ll push this to Firebase
       // await addDoc(collection(db, "fitnessLogs"), fitnessvalue);
-      
-      fetchSummary(selectedRange);
 
+      fetchSummary(selectedRange);
     } catch (error) {
       console.error(error);
-      setAlertType("error")
+      setAlertType("error");
       setMessage("Something went wrong. Try again.");
-      setOpen(true)
-    }finally{
-      setLoading(false)
+      setOpen(true);
+    } finally {
+      setLoading(false);
     }
   };
 
-const fetchSummary = async (days) => {
-  try {
-    const today = new Date();
-    const startDate = new Date();
-    startDate.setDate(today.getDate() - days); // fix: added ()
+  const fetchSummary = async (days) => {
+    try {
+      const today = new Date();
+      const startDate = new Date();
+      startDate.setDate(today.getDate() - days); // fix: added ()
 
-    const q = query(collection(db, "fithistory"), orderBy("date", "desc"));
-    const snapshot = await getDocs(q);
+      const q = query(collection(db, "fithistory"), orderBy("date", "desc"));
+      const snapshot = await getDocs(q);
 
-    const data = snapshot.docs
-      .map((doc) => doc.data())
-      .filter((item) => new Date(item.date) >= startDate);
+      const data = snapshot.docs
+        .map((doc) => doc.data())
+        .filter((item) => new Date(item.date) >= startDate);
 
-    //  Prevent crash if no records
-    if (data.length === 0) {
+      //  Prevent crash if no records
+      if (data.length === 0) {
+        setSummary({
+          weightChange: 0,
+          daysTrained: 0,
+          mostTrained: "N/A",
+          leastTrained: "N/A",
+        });
+        return;
+      }
+
+      const startweight = parseFloat(data[data.length - 1].weight);
+      const endweight = parseFloat(data[0].weight);
+      const weightChange = endweight - startweight;
+
+      const daysTrained = data.length;
+
+      const counts = {};
+      data.forEach((entry) => {
+        entry.groupworked.forEach((g) => {
+          counts[g] = (counts[g] || 0) + 1;
+        });
+      });
+
+      const mostTrained =
+        Object.keys(counts).reduce((a, b) => (counts[a] > counts[b] ? a : b)) ||
+        "N/A";
+
+      const leastTrained =
+        Object.keys(counts).reduce((a, b) => (counts[a] < counts[b] ? a : b)) ||
+        "N/A";
+
       setSummary({
-        weightChange: 0,
-        daysTrained: 0,
-        mostTrained: "N/A",
-        leastTrained: "N/A",
+        weightChange,
+        daysTrained,
+        mostTrained,
+        leastTrained,
       });
-      return;
+    } catch (error) {
+      console.error("Error fetching summary", error);
     }
+  };
 
-    const startweight = parseFloat(data[data.length - 1].weight);
-    const endweight = parseFloat(data[0].weight);
-    const weightChange = endweight - startweight;
-
-    const daysTrained = data.length;
-
-    const counts = {};
-    data.forEach((entry) => {
-      entry.groupworked.forEach((g) => {
-        counts[g] = (counts[g] || 0) + 1;
-      });
-    });
-
-    const mostTrained =
-      Object.keys(counts).reduce((a, b) =>
-        counts[a] > counts[b] ? a : b
-      ) || "N/A";
-
-    const leastTrained =
-      Object.keys(counts).reduce((a, b) =>
-        counts[a] < counts[b] ? a : b
-      ) || "N/A";
-
-    setSummary({
-      weightChange,
-      daysTrained,
-      mostTrained,
-      leastTrained,
-    });
-  } catch (error) {
-    console.error("Error fetching summary", error);
-  }
-};
-
-
-useEffect(()=>{
-  fetchSummary(selectedRange)
-}), [selectedRange];
+  useEffect(() => {
+    fetchSummary(selectedRange);
+  }),
+    [selectedRange];
 
   return (
     <main className="min-h-dvh bg-[#5A363A] text-[#DAB55D] pb-6 p-5">
@@ -185,7 +183,9 @@ useEffect(()=>{
 
       <div className=" md:flex gap-8  justify-between md:px-12 ">
         <div className="border border-[#DAB55D] bg-[#3c1f1f] p-5  space-y-13 mb-20">
-          <h1 className="font-bold text-3xl text-white">DAILY FITNESS TRACKER</h1>
+          <h1 className="font-bold text-3xl text-white">
+            DAILY FITNESS TRACKER
+          </h1>
 
           <Formik
             initialValues={initialValues}
@@ -221,7 +221,9 @@ useEffect(()=>{
                           value={option}
                           className="accent-neutral-800"
                         />
-                        <span className="font-semibold text-white">{option}</span>
+                        <span className="font-semibold text-white">
+                          {option}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -251,54 +253,50 @@ useEffect(()=>{
                 </div>
 
                 <button
-                disabled={loading}
+                  disabled={loading}
                   type="submit"
                   className="w-full bg-[#DAB55D] text-white font-medium py-2 rounded-md hover:text-[#DAB55D] hover:bg-white transition duration-200"
                 >
-               {loading ? (<ImSpinner10 className="animate-spin text-2xl justify-center items-center mx-auto font-bold"/>) : ("Save")}
+                  {loading ? (
+                    <ImSpinner10 className="animate-spin text-2xl justify-center items-center mx-auto font-bold" />
+                  ) : (
+                    "Save"
+                  )}
                 </button>
               </Form>
             )}
           </Formik>
-        
-                <Snackbar
-              open={open}
-              autoHideDuration={4000}
-              onClose={() => setOpen(false)}
-              anchorOrigin={{ vertical:'top', horizontal:'center'}}
-              
-            >
-              <Alert onClose={() => setOpen(false)} severity={alertType}>
-                {message}
-              </Alert>
-            </Snackbar>
 
+          <Snackbar
+            open={open}
+            autoHideDuration={4000}
+            onClose={() => setOpen(false)}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert onClose={() => setOpen(false)} severity={alertType}>
+              {message}
+            </Alert>
+          </Snackbar>
         </div>
-
-
-
 
         {/* SUMMARY CARD (static for now) */}
         <div className="border border-[#DAB55D] bg-[#3c1f1f] p-5  space-y-13 mb-20 text-white">
-
-
-            
-      {/* RANGE SWITCHER */}
-      <div className="mb-5 md:flex gap-3">
-        {[7, 30, 90, 180, 365].map((days) => (
-          <button
-            key={days}
-            onClick={() => setSelectedRange(days)}
-            className={`px-3 py-1 rounded font-semibold  ${
-              selectedRange === days ? "bg-[#DAB55D] text-black" : "bg-[#3c1f1f] text-[#DAB55D]"
-            }`}
-          >
-            {days === 365 ? "1 Year" : `${days} Days`}
-          </button>
-        ))}
-      </div>
-
-
+          {/* RANGE SWITCHER */}
+          <div className="mb-5 md:flex gap-3">
+            {[7, 30, 90, 180, 365].map((days) => (
+              <button
+                key={days}
+                onClick={() => setSelectedRange(days)}
+                className={`px-3 py-1 rounded font-semibold  ${
+                  selectedRange === days
+                    ? "bg-[#DAB55D] text-black"
+                    : "bg-[#3c1f1f] text-[#DAB55D]"
+                }`}
+              >
+                {days === 365 ? "1 Year" : `${days} Days`}
+              </button>
+            ))}
+          </div>
 
           <h1 className="text-3xl font-bold">FITNESS WRAPPED</h1>
 
@@ -313,11 +311,15 @@ useEffect(()=>{
               <p>{summary.daysTrained}</p>
             </div>
             <div className="flex gap-2">
-              <h1 className="font-bold text-[#DAB55D]">Most Trained Muscle group:</h1>
+              <h1 className="font-bold text-[#DAB55D]">
+                Most Trained Muscle group:
+              </h1>
               <p>{summary.mostTrained}</p>
             </div>
             <div className="flex gap-2">
-              <h1 className="font-bold text-[#DAB55D]">Least Trained Muscle group:</h1>
+              <h1 className="font-bold text-[#DAB55D]">
+                Least Trained Muscle group:
+              </h1>
               <p>{summary.leastTrained}</p>
             </div>
           </div>
