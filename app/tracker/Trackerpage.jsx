@@ -112,15 +112,13 @@ const fetchSummary = async (days) => {
 
     if (data.length === 0) {
       setSummary({
-        weightChange,
-        daysTrained,
-        mostTrained,
-        leastTrained,
+        weightChange: 0,
+        daysTrained: 0,
+        mostTrained: "N/A",
+        leastTrained: "N/A",
       });
-    } catch (error) {
-      console.error("Error fetching summary", error);
+      return;
     }
-  };
 
     const startweight = parseFloat(data[data.length - 1].weight);
     const endweight = parseFloat(data[0].weight);
