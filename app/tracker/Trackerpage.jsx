@@ -14,12 +14,17 @@ import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Alert, Snackbar } from "@mui/material";
 import { ImSpinner10 } from "react-icons/im";
+import { useSession } from "next-auth/react";
 
 import { Spinnaker } from "next/font/google";
 // import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
+
+
 const Trackerpage = () => {
+  const { data: session } = useSession();
+
   const [loading, setLoading] = useState(false);
   const [alertType, setAlertType] = useState("success");
   const [open, setOpen] = useState(false);
@@ -30,7 +35,6 @@ const Trackerpage = () => {
     mostTrained: "",
     leastTrained: "",
   });
-
   const [selectedRange, setSelectedRange] = useState(30);
 
   const groupworked = [
@@ -41,17 +45,15 @@ const Trackerpage = () => {
     "Shoulder",
     "Legs",
     "Chest",
-    "Aerobic Activities",
+    "Aerobics",
   ];
 
-  // initial form state
   const initialValues = {
     groupworked: [],
     weight: "",
     date: "",
   };
 
-  // validation schema
   const vs = Yup.object({
     weight: Yup.string().required("Weight is required"),
     date: Yup.string().required("Date is required"),
@@ -60,99 +62,55 @@ const Trackerpage = () => {
       .required("Workout is required"),
   });
 
-  // submit handler
-  const handleSubmit = async (values, { resetForm }) => {
-    setLoading(true);
-    try {
-      const fitnessvalue = {
-        ...values,
-        createdAt: new Date().toISOString(),
-      };
+ const handleSubmit = async (values, { resetForm }) => {
+  setLoading(true);
+  try {
+    const res = await fetch("/api/fithistory", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
 
-      const q = query(
-        collection(db, "fithistory"),
-        where("date", "==", values.date)
-      );
+    const result = await res.json();
 
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        setAlertType("error");
-        setMessage("You already logged your activities for this date.");
-        setOpen(true);
-        setLoading(false);
-        return;
-      }
-
-      const docRef = await addDoc(collection(db, "fithistory"), fitnessvalue);
-
-      console.log(fitnessvalue);
-      console.log("Document written with ID:", docRef.id);
-      setAlertType("success");
-      setMessage("Saved successfully!");
-      setOpen(true);
-
-      resetForm();
-
-      // later you’ll push this to Firebase
-      // await addDoc(collection(db, "fitnessLogs"), fitnessvalue);
-
-      fetchSummary(selectedRange);
-    } catch (error) {
-      console.error(error);
+    if (!res.ok) {
       setAlertType("error");
-      setMessage("Something went wrong. Try again.");
+      setMessage(result.error || "Something went wrong.");
       setOpen(true);
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
 
-  const fetchSummary = async (days) => {
-    try {
-      const today = new Date();
-      const startDate = new Date();
-      startDate.setDate(today.getDate() - days); // fix: added ()
+    setAlertType("success");
+    setMessage("Saved successfully!");
+    setOpen(true);
+    resetForm();
 
-      const q = query(collection(db, "fithistory"), orderBy("date", "desc"));
-      const snapshot = await getDocs(q);
+    fetchSummary(selectedRange);
+  } catch (error) {
+    console.error(error);
+    setAlertType("error");
+    setMessage("Something went wrong. Try again.");
+    setOpen(true);
+  } finally {
+    setLoading(false);
+  }
+};
 
-      const data = snapshot.docs
-        .map((doc) => doc.data())
-        .filter((item) => new Date(item.date) >= startDate);
 
-      //  Prevent crash if no records
-      if (data.length === 0) {
-        setSummary({
-          weightChange: 0,
-          daysTrained: 0,
-          mostTrained: "N/A",
-          leastTrained: "N/A",
-        });
-        return;
-      }
+const fetchSummary = async (days) => {
+  try {
+    const res = await fetch("/api/fithistory");
+    if (!res.ok) return;
 
-      const startweight = parseFloat(data[data.length - 1].weight);
-      const endweight = parseFloat(data[0].weight);
-      const weightChange = endweight - startweight;
+    const docs = await res.json();
 
-      const daysTrained = data.length;
+    const today = new Date();
+    const startDate = new Date();
+    startDate.setDate(today.getDate() - days);
 
-      const counts = {};
-      data.forEach((entry) => {
-        entry.groupworked.forEach((g) => {
-          counts[g] = (counts[g] || 0) + 1;
-        });
-      });
+    const data = docs.filter((item) => new Date(item.date) >= startDate);
 
-      const mostTrained =
-        Object.keys(counts).reduce((a, b) => (counts[a] > counts[b] ? a : b)) ||
-        "N/A";
-
-      const leastTrained =
-        Object.keys(counts).reduce((a, b) => (counts[a] < counts[b] ? a : b)) ||
-        "N/A";
-
+    if (data.length === 0) {
       setSummary({
         weightChange,
         daysTrained,
@@ -164,25 +122,98 @@ const Trackerpage = () => {
     }
   };
 
+    const startweight = parseFloat(data[data.length - 1].weight);
+    const endweight = parseFloat(data[0].weight);
+    const weightChange = endweight - startweight;
+
+    const daysTrained = data.length;
+
+    // ✅ Your actual groups
+    const allGroups = [
+      "Boxing Session",
+      "Back",
+      "Biceps",
+      "Triceps",
+      "Shoulder",
+      "Legs",
+      "Chest",
+      "Aerobics",
+    ];
+
+    // Initialize all counts to 0
+    const counts = {};
+    allGroups.forEach((g) => (counts[g] = 0));
+
+    // Count groups in selected range
+    data.forEach((entry) => {
+      entry.groupworked.forEach((g) => {
+        counts[g] = (counts[g] || 0) + 1;
+      });
+    });
+
+    const entries = Object.entries(counts);
+
+    const maxCount = Math.max(...entries.map(([_, c]) => c));
+
+    // --- Most trained ---
+    const mostTrainedMuscles = entries
+      .filter(([_, c]) => c === maxCount && c > 0)
+      .map(([m, c]) => `${m} (${c}x)`);
+
+    // --- Least trained ---
+    const zeroTrained = entries.filter(([_, c]) => c === 0);
+    let leastTrainedMuscles;
+
+    if (zeroTrained.length > 0) {
+      // Prefer zero-trained groups
+      leastTrainedMuscles = zeroTrained.map(([m, c]) => `${m} (${c}x)`);
+    } else {
+      const minCount = Math.min(...entries.map(([_, c]) => c));
+      leastTrainedMuscles = entries
+        .filter(([_, c]) => c === minCount)
+        .map(([m, c]) => `${m} (${c}x)`);
+    }
+
+    setSummary({
+      weightChange,
+      daysTrained,
+      mostTrained:
+        mostTrainedMuscles.length > 1
+          ? mostTrainedMuscles.join(", ")
+          : mostTrainedMuscles[0] || "N/A",
+      leastTrained:
+        leastTrainedMuscles.length > 1
+          ? leastTrainedMuscles.join(", ")
+          : leastTrainedMuscles[0] || "N/A",
+    });
+  } catch (error) {
+    console.error("Error fetching summary", error);
+  }
+};
+
+
+
+
+
   useEffect(() => {
     fetchSummary(selectedRange);
-  }),
-    [selectedRange];
+  }, [selectedRange, session?.user?.email]);
 
   return (
     <main className="min-h-dvh bg-[#5A363A] text-[#DAB55D] pb-6 p-5">
-      <div className="p-4 text-white py-15 text-center ">
+      <div className="p-4 text-white py-15 text-center">
         <div className="w-full lg:flex md:mt-10 md:px-30">
-          <div className="w-full lg:flex justify-between  mx-auto border-b border-[#9B8687]">
-            <h1 className=" font-bold text-3xl md:text-5xl text-white border-b-8 pb-4 border-[#9B8687] ">
+          <div className="w-full lg:flex justify-between mx-auto border-b border-[#9B8687]">
+            <h1 className="font-bold text-3xl md:text-5xl text-white border-b-8 pb-4 border-[#9B8687]">
               TRACK YOUR FITNESS JOURNEY
             </h1>
           </div>
         </div>
       </div>
 
-      <div className=" md:flex gap-8  justify-between md:px-12 ">
-        <div className="border border-[#DAB55D] bg-[#3c1f1f] p-5  space-y-13 mb-20">
+      <div className="md:flex gap-8 justify-between md:px-12">
+        {/* Daily Tracker Form */}
+        <div className="border border-[#DAB55D] bg-[#3c1f1f] p-5 mb-20">
           <h1 className="font-bold text-3xl text-white">
             DAILY FITNESS TRACKER
           </h1>
@@ -279,15 +310,15 @@ const Trackerpage = () => {
           </Snackbar>
         </div>
 
-        {/* SUMMARY CARD (static for now) */}
-        <div className="border border-[#DAB55D] bg-[#3c1f1f] p-5  space-y-13 mb-20 text-white">
-          {/* RANGE SWITCHER */}
+        {/* Summary */}
+        <div className="border border-[#DAB55D] bg-[#3c1f1f] p-5 mb-20 text-white">
+          {/* Range Switcher */}
           <div className="mb-5 md:flex gap-3">
             {[7, 30, 90, 180, 365].map((days) => (
               <button
                 key={days}
                 onClick={() => setSelectedRange(days)}
-                className={`px-3 py-1 rounded font-semibold  ${
+                className={`px-3 py-1 rounded font-semibold ${
                   selectedRange === days
                     ? "bg-[#DAB55D] text-black"
                     : "bg-[#3c1f1f] text-[#DAB55D]"
