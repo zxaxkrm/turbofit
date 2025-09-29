@@ -64,12 +64,12 @@ const Navbar = () => {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
-              className="outline-none"
+              className="outline-none "
             >
               <img
                 src={session?.user?.image}
                 alt={session?.user?.name.slice(0, 2).toUpperCase()}
-                className="rounded-full w-10 h-10 text-[#5A363A] max-md:hidden hover:text-white"
+                className="rounded-full w-10 h-10 text-[#5A363A]  hover:text-white"
               />
             </button>
 
